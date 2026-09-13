@@ -1,0 +1,6 @@
+{
+  "name": "Higher Dimension Lab",
+  "description": "An advanced educational and experimental laboratory for exploring dimensions from 1D to 5D with epistemological rigor.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
