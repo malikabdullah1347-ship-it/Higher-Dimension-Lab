@@ -40,10 +40,14 @@ export class ThreeDimensionRenderer {
   private mode: ObservationMode = 'PROJECTION';
   private animFrameId: number | null = null;
   private disposed = false;
+  private currentWidth = 0;
+  private currentHeight = 0;
 
   constructor(options: RendererOptions) {
     this.canvas = options.canvas;
     this.mode = options.mode;
+    this.currentWidth = options.width;
+    this.currentHeight = options.height;
 
     // 1. WebGL Renderer
     this.renderer = new THREE.WebGLRenderer({
@@ -352,6 +356,11 @@ export class ThreeDimensionRenderer {
 
   resize(width: number, height: number): void {
     if (this.disposed || width <= 0 || height <= 0) return;
+    if (Math.abs(this.currentWidth - width) < 1 && Math.abs(this.currentHeight - height) < 1) {
+      return;
+    }
+    this.currentWidth = width;
+    this.currentHeight = height;
     this.camera.aspect = width / height;
     this.camera.updateProjectionMatrix();
     this.renderer.setSize(width, height);

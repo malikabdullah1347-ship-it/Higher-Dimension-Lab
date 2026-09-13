@@ -10,15 +10,30 @@
   body {
     font-family: var(--font-sans);
     background-color: #030712;
-    color: #f1f5f9;
+    color: #f8fafc;
+    font-size: 15px;
+    line-height: 1.6;
+    letter-spacing: -0.011em;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    letter-spacing: 0.02em;
   }
 
   code, pre, .font-mono {
     font-family: var(--font-mono);
+    letter-spacing: -0.01em;
   }
 
   .font-display {
     font-family: var(--font-display);
+  }
+
+  /* Accessible focus indicators */
+  :focus-visible {
+    outline: 2px solid #06b6d4;
+    outline-offset: 2px;
   }
 }
 
@@ -32,7 +47,7 @@
 
 .bg-dots-pattern {
   background-size: 24px 24px;
-  background-image: radial-gradient(rgba(56, 189, 248, 0.15) 1px, transparent 1px);
+  background-image: radial-gradient(rgba(56, 189, 248, 0.12) 1px, transparent 1px);
 }
 
 /* Custom scrollbar for lab aesthetic */
@@ -50,4 +65,5 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #334155;
 }
+
 

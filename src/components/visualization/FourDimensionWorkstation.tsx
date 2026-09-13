@@ -104,20 +104,29 @@ export function FourDimensionWorkstation({ onOpenEpistemicLegend }: FourDimensio
     });
     rendererRef.current = renderer;
 
-    // Handle container resize
+    // Handle container resize with requestAnimationFrame to prevent ResizeObserver loop error
+    let rafId: number | null = null;
     const resizeObserver = new ResizeObserver((entries) => {
-      for (const entry of entries) {
-        const cr = entry.contentRect;
-        if (cr.width > 0) {
-          const h = Math.min(cr.width * 0.65, 520);
-          renderer.resize(cr.width, h);
-        }
+      if (rafId !== null) {
+        cancelAnimationFrame(rafId);
       }
+      rafId = requestAnimationFrame(() => {
+        for (const entry of entries) {
+          const cr = entry.contentRect;
+          if (cr.width > 0 && rendererRef.current) {
+            const h = Math.min(cr.width * 0.65, 520);
+            rendererRef.current.resize(cr.width, h);
+          }
+        }
+      });
     });
 
     if (parent) resizeObserver.observe(parent);
 
     return () => {
+      if (rafId !== null) {
+        cancelAnimationFrame(rafId);
+      }
       if (parent) resizeObserver.unobserve(parent);
       renderer.dispose();
       rendererRef.current = null;

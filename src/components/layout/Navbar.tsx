@@ -32,7 +32,7 @@ export function Navbar({
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-slate-800/80 bg-slate-950/90 backdrop-blur-md">
-      <div className="flex items-center justify-between px-4 sm:px-6 h-16 max-w-7xl mx-auto">
+      <div className="flex items-center justify-between px-4 sm:px-6 h-16 max-w-[1720px] mx-auto">
         {/* Brand */}
         <div className="flex items-center gap-3">
           <button

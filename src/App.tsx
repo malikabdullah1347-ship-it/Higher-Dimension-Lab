@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { ModuleId, DimensionId, EpistemicStatus } from './types';
 import { Navbar } from './components/layout/Navbar';
 import { Sidebar } from './components/layout/Sidebar';
@@ -22,6 +22,23 @@ export default function App() {
   const [isEpistemicLegendOpen, setIsEpistemicLegendOpen] = useState<boolean>(false);
   const [inspectedStatus, setInspectedStatus] = useState<EpistemicStatus | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState<boolean>(false);
+
+  const handleToggleSidebar = useCallback(() => {
+    setIsSidebarCollapsed((prev) => !prev);
+  }, []);
+
+  // Keyboard shortcut Ctrl+B / Cmd+B for sidebar toggle
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'b') {
+        e.preventDefault();
+        handleToggleSidebar();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [handleToggleSidebar]);
 
   const handleOpenEpistemicLegend = (status?: EpistemicStatus) => {
     setInspectedStatus(status || null);
@@ -46,17 +63,19 @@ export default function App() {
         setIsMobileMenuOpen={setIsMobileMenuOpen}
       />
 
-      {/* Main Workspace Body: Sidebar + Active View */}
-      <div className="flex-1 flex w-full max-w-7xl mx-auto">
-        {/* Modular Left Sidebar */}
+      {/* Main Workspace Body: Foldable Sidebar + Active View */}
+      <div className="flex-1 flex w-full max-w-[1720px] mx-auto min-w-0 transition-all duration-300">
+        {/* Modular Left Sidebar with Real Expanded/Collapsed States */}
         <Sidebar
           currentModule={currentModule}
           onSelectModule={setCurrentModule}
           onOpenEpistemicLegend={() => handleOpenEpistemicLegend()}
+          isCollapsed={isSidebarCollapsed}
+          onToggleCollapse={handleToggleSidebar}
         />
 
         {/* Dynamic Module Viewport */}
-        <main className="flex-1 p-4 sm:p-6 lg:p-8 min-w-0 overflow-y-auto">
+        <main className="flex-1 p-4 sm:p-6 lg:p-8 min-w-0 overflow-y-auto transition-all duration-300">
           {currentModule === 'overview' && (
             <DashboardView
               onSelectModule={setCurrentModule}
